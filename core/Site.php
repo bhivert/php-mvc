@@ -1,9 +1,9 @@
 <?php
 /**
- * File: /home/noxx/00-www/php-mvc/core/Site.php
+ * File: core/Site.php
  * @author Benoit HIVERT <hivert.benoit@gmail.com>
  * Date: 20.07.2017
- * Last Modified Date: 23.07.2017
+ * Last Modified Date: 28.07.2017
  * Last Modified By: Benoit HIVERT <hivert.benoit@gmail.com>
  */
 
@@ -11,15 +11,15 @@ namespace Core;
 
 class Site {
 	private	$_router;
-	private	$_folder;
+	private	$_namespace;
 	private $_config;
 
-	function __construct(Rooter $router, $folder) {
-		$file = ROOT."sites/{$folder}/config.php";
+	function __construct(Router $router, String $namespace) {
+		$file = ROOT."sites/{$namespace}/config.php";
 		if (!file_exists($file))
-			throw new \Exception("Config error: folder, '{$folder}' not found !");
+			throw new \Exception("Site error: site '{$amespace}' not found !");
 		$this->_router = $router;
-		$this->_folder = $folder;
+		$this->_namespace = $namespace;
 		$this->_config = require $file;
 	}
 
@@ -34,7 +34,7 @@ class Site {
 	}
 
 	function getHttps() {
-		if (!isset($this->_config['https']) || $this->_config['errors'] !== true)
+		if (!isset($this->_config['https']) || $this->_config['https'] !== true)
 			return false;
 		return true;
 	}
@@ -71,23 +71,33 @@ class Site {
 		return $this->_config['description'];
 	}
 
+	function callController(String $name, String $action, Array $argv = []) {
+		$controller = "\\Sites\\{$this->_namespace}\\controllers\\{$name}Controller";
+		if (!($methods = get_class_methods($controller)))
+			throw new \Exception("Site error: controller '{$controller}' not found !");
+		$action = "{$action}Action";
+		if (!in_array($action, $methods))
+			throw new \Exception("Site error: '{$controller}->{$action}' not found !");
+		return (new $controller)->$action($this, $argv);
+	}
+
 	function render(Array $kwargs) {
 		ob_start();
-		require ROOT."core/Templates/head.phtml";
+		$site = $this;
+		require ROOT."core/templates/head.phtml";
 		$head = ob_get_clean();
 		ob_start();
 		ob_start();
 		foreach ($kwargs as $view => $content) {
-			$file = ROOT."sites/{$this->_folder}/views/"
+			$file = ROOT."sites/{$this->_namespace}/views/"
 				.str_replace('.', '/', $view).".phtml";
 			if (!file_exists($file))
 				throw new \Exception("Render error: view: '{$view}' not found !");
 			require $file; 
 		}
 		$content = ob_get_clean();
-		require ROOT."core/Templates/body.phtml";
+		require ROOT."core/templates/body.phtml";
 		$body = ob_get_clean();
-		require ROOT."core/Templates/html.phtml";
-		exit ;
+		require ROOT."core/templates/html.phtml";
 	}
 }
