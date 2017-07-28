@@ -21,13 +21,18 @@ class Site {
 		$this->_router = $router;
 		$this->_namespace = $namespace;
 		$this->_config = require $file;
+		if (!$this->getErrorState) {
+			ini_set('display_errors', 0);
+			ini_set('display_startup_errors', 0);
+			ini_set('error_reporting', 0);
+		}
 	}
 
 	function getFolder() {
 		return $this->_folder;
 	}
 
-	function getErrors() {
+	function getErrorState() {
 		if (!isset($this->_config['errors']) || $this->_config['errors'] !== true)
 			return false;
 		return true;
