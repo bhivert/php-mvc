@@ -103,6 +103,6 @@ class Site {
 		$content = ob_get_clean();
 		require ROOT."core/templates/body.phtml";
 		$body = ob_get_clean();
-		require ROOT."core/templates/html.phtml";
+		return require ROOT."core/templates/html.phtml";
 	}
 }

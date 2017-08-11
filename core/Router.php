@@ -29,8 +29,7 @@ class Router {
 				throw new \Exception("Routing error: route {$name} bad regex !");
 			}
 		}
-		(new Site($this, 'main'))->callController('default', 'index');
-		exit ;
+		echo (new Site($this, 'main'))->callController('default', 'index');
 	}
 }
 

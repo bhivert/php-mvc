@@ -11,7 +11,7 @@ namespace Sites\main\controllers;
 
 class defaultController {
 	public function indexAction(\Core\Site $site, Array $argv) {
-		$site->render(['home' => 'hello world !']);
+		return $site->render(['home' => 'hello world !']);
 	}
 }
 
