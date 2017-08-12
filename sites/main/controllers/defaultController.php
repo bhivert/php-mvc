@@ -9,9 +9,10 @@
 
 namespace Sites\main\controllers;
 
-class defaultController {
-	public function indexAction(\Core\Site $site, Array $argv) {
-		return $site->render(['home' => 'hello world !']);
+class defaultController extends \Core\Controller {
+	public function indexAction(Array $argv) {
+		$home = $this->render->template(['home' => 'hello world !']);
+		$this->render->site(['home' => $home]);
 	}
 }
 

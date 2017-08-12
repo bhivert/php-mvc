@@ -76,6 +76,10 @@ class Site {
 		return $this->_config['description'];
 	}
 
+	function getNamespace() {
+		return $this->_namespace;
+	}
+
 	function callController(String $name, String $action, Array $argv = []) {
 		$controller = "\\Sites\\{$this->_namespace}\\controllers\\{$name}Controller";
 		if (!($methods = get_class_methods($controller)))
@@ -83,26 +87,6 @@ class Site {
 		$action = "{$action}Action";
 		if (!in_array($action, $methods))
 			throw new \Exception("Site error: '{$controller}->{$action}' not found !");
-		return (new $controller)->$action($this, $argv);
-	}
-
-	function render(Array $kwargs) {
-		ob_start();
-		$site = $this;
-		require ROOT."core/templates/head.phtml";
-		$head = ob_get_clean();
-		ob_start();
-		ob_start();
-		foreach ($kwargs as $view => $content) {
-			$file = ROOT."sites/{$this->_namespace}/views/"
-				.str_replace('.', '/', $view).".phtml";
-			if (!file_exists($file))
-				throw new \Exception("Render error: view: '{$view}' not found !");
-			require $file; 
-		}
-		$content = ob_get_clean();
-		require ROOT."core/templates/body.phtml";
-		$body = ob_get_clean();
-		return require ROOT."core/templates/html.phtml";
+		return (new $controller($this))->$action($argv);
 	}
 }
