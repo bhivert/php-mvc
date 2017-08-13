@@ -11,8 +11,12 @@ namespace Sites\main\controllers;
 
 class defaultController extends \Core\Controller {
 	public function indexAction(Array $argv) {
-		$home = $this->render->template(['home' => 'hello world !']);
-		$this->render->site(['home' => $home]);
+		$this->render->site(['skeleton' => [
+			'title' => $this->site->getTitle(),
+			'menu'	=> 'MENU',
+			'content'	=> $this->render->template(['home' => 'hello world !']),
+			'footer'	=> $this->site->getAuthor()
+		]]);
 	}
 }
 

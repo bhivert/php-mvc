@@ -20,7 +20,23 @@ try {
 	require ROOT.'sites/Autoloader.php';
 	\Sites\Autoloader::register();
 
-	(new \Core\Router())->route($_SERVER['REQUEST_URI']);
+	if (strpos($_SERVER['REQUEST_URI'], '/public') === 0
+		&& $_SERVER['REQUEST_URI'] !== '/public/index.php'
+		&& is_file(ROOT.$_SERVER['REQUEST_URI'])
+	) {
+		$mine_t = [
+			'css'	=>	"text/css",
+			'js'	=>	"application/x-javascript"
+		];
+		$m = [];
+		if (preg_match('/^.*\.(.*)$/', $_SERVER['REQUEST_URI'], $m) === 0
+			|| !isset($mine_t[$m[1]]))
+			throw new Exception("Index Error: UnAutorized mine type !");
+		header("Content-type: ".$mine_t[$m[1]]);
+		require ROOT.$_SERVER['REQUEST_URI'];
+	} else {
+		(new \Core\Router())->route($_SERVER['REQUEST_URI']);
+	}
 
 } catch (Exception $e) {
 	echo "{$e->getMessage()}<br />".PHP_EOL;
