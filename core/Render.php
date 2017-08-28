@@ -10,6 +10,7 @@ class Render {
 	}
 
 	function template(Array $kwargs) {
+		$site = $this->_site;
 		ob_start();
 		foreach ($kwargs as $view => $content) {
 			$file = ROOT."sites/{$this->_site->getNamespace()}/views/"
@@ -22,8 +23,8 @@ class Render {
 	}
 
 	function site(Array $kwargs) {
-		ob_start();
 		$site = $this->_site;
+		ob_start();
 		require ROOT."core/templates/head.phtml";
 		$head = ob_get_clean();
 		ob_start();

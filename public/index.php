@@ -25,8 +25,9 @@ try {
 		&& is_file(ROOT.$_SERVER['REQUEST_URI'])
 	) {
 		$mine_t = [
-			'css'	=>	"text/css",
-			'js'	=>	"application/x-javascript"
+			'css'	=>	'text/css',
+			'js'	=>	'application/x-javascript',
+			'png'	=>	'image/png'
 		];
 		$m = [];
 		if (preg_match('/^.*\.(.*)$/', $_SERVER['REQUEST_URI'], $m) === 0

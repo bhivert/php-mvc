@@ -13,6 +13,7 @@ class Site {
 	private	$_router;
 	private	$_namespace;
 	private $_config;
+	private	$_jsFiles;
 
 	function __construct(Router $router, String $namespace) {
 		$file = ROOT."sites/{$namespace}/config.php";
@@ -21,6 +22,7 @@ class Site {
 		$this->_router = $router;
 		$this->_namespace = $namespace;
 		$this->_config = require $file;
+		$this->_jsFiles = [];
 		if (!$this->getErrorState()) {
 			ini_set('display_errors', 0);
 			ini_set('display_startup_errors', 0);
@@ -88,5 +90,17 @@ class Site {
 		if (!in_array($action, $methods))
 			throw new \Exception("Site error: '{$controller}->{$action}' not found !");
 		return (new $controller($this))->$action($argv);
+	}
+
+	function addJsFile(String $file) {
+		$file = "public/js/{$file}.js";
+		if (!file_exists(ROOT.$file))
+			throw new \Exception("Site error: file '{$file}' not found !");
+		if (!in_array($file, $this->_jsFiles))
+			$this->_jsFiles[] = $file;
+	}
+
+	function getJsFiles() {
+		return $this->_jsFiles;
 	}
 }
