@@ -27,7 +27,8 @@ try {
 		$mine_t = [
 			'css'	=>	'text/css',
 			'js'	=>	'application/x-javascript',
-			'png'	=>	'image/png'
+			'png'	=>	'image/png',
+			'mp4'	=>	'video/mp4'
 		];
 		$m = [];
 		if (preg_match('/^.*\.(.*)$/', $_SERVER['REQUEST_URI'], $m) === 0
