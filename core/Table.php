@@ -14,7 +14,7 @@ class Table {
 	private $_model_name;
 	private $_db;
 
-	public function __construct(Database $db, $model_name, $table_name = NULL) {
+	public function __construct(Database $db, String $model_name, String $table_name = NULL) {
 		$this->_db = $db;
 		$this->_model_name = $model_name;
 		if (isset($table_name)) {
