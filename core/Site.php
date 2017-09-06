@@ -13,15 +13,27 @@ class Site {
 	private	$_router;
 	private	$_namespace;
 	private $_config;
+	private	$_coreDB;
+	private	$_siteDB;
 	private	$_jsFiles;
 
 	function __construct(Router $router, String $namespace) {
-		$file = ROOT."sites/{$namespace}/config.php";
-		if (!file_exists($file))
+		$conf = ROOT."sites/{$namespace}/config.php";
+		if (!file_exists($conf))
 			throw new \Exception("Site error: site '{$amespace}' not found !");
 		$this->_router = $router;
 		$this->_namespace = $namespace;
-		$this->_config = require $file;
+		$this->_config = require $conf;
+		$this->_coreDB = null;
+		$this->_siteDB = null;
+		if (file_exists(ROOT.'database.php')) {
+			$conf = require ROOT.'database.php';
+			$this->_coreDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
+		}
+		if (file_exists(ROOT."sites/{$this->_namespace}/database.php")) {
+			$conf = require ROOT."sites/{$this->_namespace}/database.php";
+			$this->_siteDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
+		}
 		$this->_jsFiles = [];
 		if (!$this->getErrorState()) {
 			ini_set('display_errors', 0);
@@ -80,6 +92,22 @@ class Site {
 
 	function getNamespace() {
 		return $this->_namespace;
+	}
+
+	function getDb() {
+		return $this->_coreDB;
+	}
+
+	function getSiteDb() {
+		return $this->_siteDB;
+	}
+
+	function getModel(String $modelname, String $tablename = null) {
+		return (new Table($this->getDb(), "\\Models\\{$modelname}", $tablename));
+	}
+
+	function getSiteModel(String $modelname, String $tablename = null) {
+		return (new Table($this->getSiteDb(), "\\Sites\\{$this->namespace}\\Models\\{$modelname}", $tablename));
 	}
 
 	function callController(String $name, String $action, Array $argv = []) {

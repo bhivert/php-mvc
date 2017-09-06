@@ -14,15 +14,13 @@ class Table {
 	private $_model_name;
 	private $_db;
 
-	public function __construct(Database $db, String $model_name, String $table_name = NULL) {
+	public function __construct(Database $db, String $modelname, String $tablename = NULL) {
 		$this->_db = $db;
-		$this->_model_name = $model_name;
-		if (isset($table_name)) {
-			$this->_table_name = strtolower($table_name);
+		$this->_model_name = $modelname;
+		if (isset($tablename)) {
+			$this->_table_name = strtolower($tablename);
 		} else {
-			$class_name = explode('\\', $model_name);
-			$class_name = end($class_name);
-			$this->_table_name = strtolower($class_name) . 's';
+			$this->_table_name = strtolower(end(explode('\\', $modelname))) . 's';
 		}
 	}
 

@@ -20,6 +20,10 @@ try {
 	require ROOT.'sites/Autoloader.php';
 	\Sites\Autoloader::register();
 
+	require ROOT.'models/Autoloader.php';
+	\Models\Autoloader::register();
+
+
 	if (strpos($_SERVER['REQUEST_URI'], '/public') === 0
 		&& $_SERVER['REQUEST_URI'] !== '/public/index.php'
 		&& is_file(ROOT.$_SERVER['REQUEST_URI'])
