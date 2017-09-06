@@ -1,6 +1,6 @@
 <?php
 /**
- * File: /home/noxx/00-www/php-mvc/core/Autoloader.php
+ * File: core/Autoloader.php
  * @author Benoit HIVERT <hivert.benoit@gmail.com>
  * Date: 20.07.2017
  * Last Modified Date: 20.07.2017
