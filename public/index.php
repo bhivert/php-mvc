@@ -23,6 +23,7 @@ try {
 	require ROOT.'models/Autoloader.php';
 	\Models\Autoloader::register();
 
+	\Core\Session::init();
 
 	if (strpos($_SERVER['REQUEST_URI'], '/public') === 0
 		&& $_SERVER['REQUEST_URI'] !== '/public/index.php'

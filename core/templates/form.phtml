@@ -1,0 +1,24 @@
+<form method='post'>
+	<?php foreach ($content as $id => $param) : ?>
+		<div class='form-group'>
+			<label for='<?= $id ?>'><?= $param['label'] ?>:</label>
+			<?php if ($param['type'] != 'textarea') : ?>
+				<input id='<?= $id ?>' name='<?= $id ?>' type='<?= $param['type'] ?>' class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'>
+			<?php else : ?>
+				<textarea id='<?= $id ?>' name='<?= $id ?>' class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'></textarea>
+			<?php endif; ?>
+		</div>
+	<?php endforeach; ?>
+	<button id='submit' name='submit' value='submit' type="submit" class="btn btn-default">Submit</button>
+	<input type="hidden" name='csrf' value='<?= \Core\Session::getKey('csrf') ?>'/>
+</form>
+</form>
+
+
+
+
+
+
+
+
+
