@@ -1,5 +1,6 @@
 <form method='post'>
 	<?php foreach ($content as $id => $param) : ?>
+		<?php if ($id == 'submit') continue; ?>
 		<div class='form-group'>
 			<label for='<?= $id ?>'><?= $param['label'] ?>:</label>
 			<?php if ($param['type'] != 'textarea') : ?>
@@ -9,16 +10,6 @@
 			<?php endif; ?>
 		</div>
 	<?php endforeach; ?>
-	<button id='submit' name='submit' value='submit' type="submit" class="btn btn-default">Submit</button>
 	<input type="hidden" name='csrf' value='<?= \Core\Session::getKey('csrf') ?>'/>
+		<button id='submit' name='submit' value='submit' type="submit" class="btn btn-default"><?= (isset($content['submit'])) ? "{$content['submit']}": 'Submit' ?></button>
 </form>
-</form>
-
-
-
-
-
-
-
-
-
