@@ -19,7 +19,7 @@ class Site {
 	private	$_jsFiles;
 
 	function __construct(Router $router, String $namespace) {
-		if (!isset(self::$_site))
+		if (isset(self::$_site))
 			throw new \Exception("Site error: site '".\Site::getSite().getNamespace()."' not found !");
 		$conf = ROOT."sites/{$namespace}/config.php";
 		if (!file_exists($conf))
