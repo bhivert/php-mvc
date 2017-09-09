@@ -24,7 +24,6 @@ class Mail {
 		$this->_header = "From: {$this->_from}\r\n";
 		$this->_header .= 'MIME-Version: 1.0'."\r\n";
 		$this->_header .= 'Content-type: text/html;'.Site::getSite()->getCharset()."\r\n";
-		echo $this->_header;
 	}
 
 	public function send() {
