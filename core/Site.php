@@ -10,6 +10,7 @@
 namespace Core;
 
 class Site {
+	private	static $_site = null;
 	private	$_router;
 	private	$_namespace;
 	private $_config;
@@ -18,32 +19,38 @@ class Site {
 	private	$_jsFiles;
 
 	function __construct(Router $router, String $namespace) {
-		$conf = ROOT."sites/{$namespace}/config.php";
-		if (!file_exists($conf))
-			throw new \Exception("Site error: site '{$amespace}' not found !");
-		$this->_router = $router;
-		$this->_namespace = $namespace;
-		$this->_config = require $conf;
-		$this->_coreDB = null;
-		$this->_siteDB = null;
-		if (file_exists(ROOT.'database.php')) {
-			$conf = require ROOT.'database.php';
-			$this->_coreDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
-		}
-		if (file_exists(ROOT."sites/{$this->_namespace}/database.php")) {
-			$conf = require ROOT."sites/{$this->_namespace}/database.php";
-			$this->_siteDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
-		}
-		$this->_jsFiles = [];
-		if (!$this->getErrorState()) {
-			ini_set('display_errors', 0);
-			ini_set('display_startup_errors', 0);
-			ini_set('error_reporting', 0);
-		}
+		if (!isset(self::$_site)) {
+			$conf = ROOT."sites/{$namespace}/config.php";
+			if (!file_exists($conf))
+				throw new \Exception("Site error: site '{$amespace}' not found !");
+			$this->_router = $router;
+			$this->_namespace = $namespace;
+			$this->_config = require $conf;
+			$this->_coreDB = null;
+			$this->_siteDB = null;
+			if (file_exists(ROOT.'database.php')) {
+				$conf = require ROOT.'database.php';
+				$this->_coreDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
+			}
+			if (file_exists(ROOT."sites/{$this->_namespace}/database.php")) {
+				$conf = require ROOT."sites/{$this->_namespace}/database.php";
+				$this->_siteDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
+			}
+			$this->_jsFiles = [];
+			if (!$this->getErrorState()) {
+				ini_set('display_errors', 0);
+				ini_set('display_startup_errors', 0);
+				ini_set('error_reporting', 0);
+			}
+			self::$_site = $this;
+		} else
+			throw new \Exception("Site error: site '".\Site::getSite().getNamespace()."' not found !");
 	}
 
-	function getFolder() {
-		return $this->_folder;
+	static function getSite() {
+		if (!isset(self::$_site))
+			throw new \Exception("Site error: site unset !");
+		return self::$_site;
 	}
 
 	function getErrorState() {
