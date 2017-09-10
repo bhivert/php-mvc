@@ -21,9 +21,10 @@ class Mail {
 		$this->_from = $from;
 		$this->_object = $object;
 		$this->_message = $message;
-		$this->_header = "From: {$this->_from}\r\n";
-		$this->_header .= 'MIME-Version: 1.0'."\r\n";
-		$this->_header .= 'Content-type: text/html;'.Site::getSite()->getCharset()."\r\n";
+		$this->_header = 'MIME-Version: 1.0'."\r\n";
+		$this->_header .= 'Content-type: text/html; charset=iso-8859-1'."\r\n";
+		$this->_header .= "To: {$this->_to} <{$this->_to}>\r\n";
+		$this->_header .= "From: {$this->_from}\r\n";
 	}
 
 	public function send() {

@@ -13,8 +13,8 @@ use Core;
 
 class Model {
 	public function __get($key) {
-		$methode = 'get' . ucfirst($key);
-		$this->$key = $this->$methode();
+		$method = "_{$key}";
+		$this->$key = $this->$method();
 		return ($this->$key);
 	}
 }

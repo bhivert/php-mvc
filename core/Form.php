@@ -10,11 +10,11 @@
 namespace Core;
 
 class Form {
-	private	$_post_request;
+	private	$_request;
 	private	$_items;
 
-	public function	__construct(Array $post, Array $items = []) {
-		$this->_post_request = $post;
+	public function	__construct(Array $request, Array $items = []) {
+		$this->_request = $request;
 		$this->_items = $items;
 	}
 
