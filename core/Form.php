@@ -27,27 +27,30 @@ class Form {
 	}
 
 	public function isPosted() {
-		if (!empty($_POST) && !empty($this->_request))
-			;
+		if (!empty($_POST) && isset($_POST['submit']) && empty(array_diff($_POST, $this->_request)))
+			return true;
+		return false;
 	}
 
 	public function isValid(Array $request = null) {
 		$valid = true;
 		if ($request == null)
 			$request = $this->_request;
+		else
+			$this->_request = $request;
 		if (empty($request) || !isset($request['csrf']) || $request['csrf'] !== \Core\Session::getKey('csrf'))
 			$valid = false;
 		foreach(get_class_methods($this->_model) as $method) {
 			if (strncmp($method, 'form_', 5) === 0) {
 				$key = substr($method, 5);
 				if (!isset($this->_request[$key])) {
-					$this->_valid[$key] = 'has_warning'; 
+					$this->_valid[$key] = 'error'; 
 					$valid = false;
 				} else if ($this->_model->$method($this->_request[$key]) === false) {
-					$this->_valid[$key] = 'has_error'; 
+					$this->_valid[$key] = 'warning'; 
 					$valid = false;
 				} else {
-					$this->_valid[$key] = 'has_success'; 
+					$this->_valid[$key] = 'success'; 
 				}
 			}
 		}
