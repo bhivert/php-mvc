@@ -17,4 +17,9 @@ class Model {
 		$this->$key = $this->$method();
 		return ($this->$key);
 	}
+
+	public function __isset($key) {
+		$method = "_{$key}";
+		return (isset($this->$method));
+	}
 }
