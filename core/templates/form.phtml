@@ -14,12 +14,16 @@
 <form method='post'>
 	<?php foreach ($items as $id => $param) : ?>
 		<?php if ($id == 'submit') continue; ?>
-		<div class='form-group has-feedback <?php if (isset($valid[$id])) echo $bs_errors[$valid[$id]] ?>'>
+		<div class='form-group has-feedback <?= (isset($valid[$id])) ? $bs_errors[$valid[$id]] : ''  ?>'>
 			<label for='<?= $id ?>' class='control-label'><?= $param['label'] ?>:</label>
 			<?php if ($param['type'] != 'textarea') : ?>
-				<input id='<?= $id ?>' name='<?= $id ?>' type='<?= $param['type'] ?>' class='form-control <?= $param['class'] ?>' style='<?= $param['style'] ?>'>
+			<input id='<?= $id ?>' name='<?= $id ?>' type='<?= $param['type'] ?>'
+						value='<?= (isset($request[$id])) ? $request[$id] : ''?>' placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>'
+						class='form-control <?= $param['class'] ?>' style='<?= $param['style'] ?>'>
 			<?php else : ?>
-				<textarea id='<?= $id ?>' name='<?= $id ?>' class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'></textarea>
+				<textarea id='<?= $id ?>' name='<?= $id ?>'
+						value='<?= (isset($request[$id])) ? $request[$id] : ''?>' placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>'
+						class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'></textarea>
 			<?php endif; ?>
 			<span class='glyphicon form-control-feedback <?php if (isset($valid[$id])) echo $bs_glyph[$valid[$id]] ?>'></span>
 		</div>

@@ -46,15 +46,24 @@ class Form {
 				if (!isset($this->_request[$key])) {
 					$this->_valid[$key] = 'error'; 
 					$valid = false;
-				} else if ($this->_model->$method($this->_request[$key]) === false) {
-					$this->_valid[$key] = 'warning'; 
-					$valid = false;
 				} else {
-					$this->_valid[$key] = 'success'; 
+					$this->_request[$key] = htmlspecialchars(stripslashes(trim($this->_request[$key])));
+					if ($this->_model->$method($this->_request[$key]) == false) {
+						$this->_valid[$key] = 'warning';
+						$valid = false;
+					} else {
+						$this->_valid[$key] = 'success';
+					}
 				}
 			}
 		}
 		return $valid;
+	}
+
+	public function __get($key) {
+		if (isset($this->_request[$key]))
+			return $this->_request[$key];
+		return false;
 	}
 
 	public function	__toString() {
