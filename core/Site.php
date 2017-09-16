@@ -76,6 +76,10 @@ class Site {
 		return $this->_config['title'];
 	}
 
+	function getGtmId() {
+		return (isset($this->_config['gtm_id'])) ? $this->_config['gtm_id'] : '';
+	}
+
 	function getAuthor() {
 		if (!isset($this->_config['author']))
 			throw new \Exception("Config error: key, author not set !");

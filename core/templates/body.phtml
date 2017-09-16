@@ -1,8 +1,15 @@
 <body>
+	<?php if (($gtm_id = $site->getGtmId()) != '') : ?>
+		<noscript><!-- Google Tag Manager (noscript) -->
+		<iframe src='https://www.googletagmanager.com/ns.html?id=<?= $gtm_id ?>' height="0" width="0" style="display:none;visibility:hidden"></iframe>
+		</noscript><!-- End Google Tag Manager (noscript) -->
+	<?php endif;?>
+
 <?= $content ?>
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-<?php foreach ($site->getJsFiles() as $file) : ?>
-	<script src='<?= $file ?>'></script>
-<?php endforeach ;?>
+
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+	<?php foreach ($site->getJsFiles() as $file) : ?>
+		<script src='<?= $file ?>'></script>
+	<?php endforeach ;?>
 </body>
