@@ -47,7 +47,7 @@ class Form {
 					$this->_valid[$key] = 'error'; 
 					$valid = false;
 				} else {
-					$this->_request[$key] = htmlspecialchars(stripslashes(trim($this->_request[$key])));
+					$this->_request[$key] = strip_tags(htmlentities(trim(stripslashes($this->_request[$key])), ENT_QUOTES, \Core\Site::getSite()->getCharset()));
 					if ($this->_model->$method($this->_request[$key]) == false) {
 						$this->_valid[$key] = 'warning';
 						$valid = false;

@@ -22,8 +22,8 @@
 						class='form-control <?= $param['class'] ?>' style='<?= $param['style'] ?>'>
 			<?php else : ?>
 				<textarea id='<?= $id ?>' name='<?= $id ?>'
-						value='<?= (isset($request[$id])) ? $request[$id] : ''?>' placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>'
-						class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'></textarea>
+						placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>'
+						class='<?= $param['class'] ?>' style='<?= $param['style'] ?>'><?= (isset($request[$id])) ? $request[$id] : '' ?></textarea>
 			<?php endif; ?>
 			<span class='glyphicon form-control-feedback <?php if (isset($valid[$id])) echo $bs_glyph[$valid[$id]] ?>'></span>
 		</div>
