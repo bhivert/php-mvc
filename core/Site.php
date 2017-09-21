@@ -14,9 +14,10 @@ class Site {
 	private	$_router;
 	private	$_namespace;
 	private $_config;
-	private	$_coreDB;
+	private	$_mainDB;
 	private	$_siteDB;
 	private	$_jsFiles;
+	private	$_jsURLs;
 
 	function __construct(Router $router, String $namespace) {
 		if (isset(self::$_site))
@@ -27,17 +28,18 @@ class Site {
 		$this->_router = $router;
 		$this->_namespace = $namespace;
 		$this->_config = require $conf;
-		$this->_coreDB = null;
+		$this->_mainDB = null;
 		$this->_siteDB = null;
 		if (file_exists(ROOT.'database.php')) {
 			$conf = require ROOT.'database.php';
-			$this->_coreDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
+			$this->_mainDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
 		}
 		if (file_exists(ROOT."sites/{$this->_namespace}/database.php")) {
 			$conf = require ROOT."sites/{$this->_namespace}/database.php";
 			$this->_siteDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
 		}
 		$this->_jsFiles = [];
+		$this->_jsURLs = [];
 		if (!$this->getErrorState()) {
 			ini_set('display_errors', 0);
 			ini_set('display_startup_errors', 0);
@@ -76,10 +78,6 @@ class Site {
 		return $this->_config['title'];
 	}
 
-	function getGtmId() {
-		return (isset($this->_config['gtm_id'])) ? $this->_config['gtm_id'] : '';
-	}
-
 	function getAuthor() {
 		if (!isset($this->_config['author']))
 			throw new \Exception("Config error: key, author not set !");
@@ -90,6 +88,10 @@ class Site {
 		if (!isset($this->_config['email']))
 			throw new \Exception("Config error: key, email not set !");
 		return $this->_config['email'];
+	}
+
+	function getGtmId() {
+		return (isset($this->_config['gtm_id'])) ? $this->_config['gtm_id'] : '';
 	}
 
 	function getKeywords() {
@@ -105,23 +107,23 @@ class Site {
 	}
 
 	function getDb() {
-		return $this->_coreDB;
+		return $this->_mainDB;
 	}
 
 	function getSiteDb() {
 		return $this->_siteDB;
 	}
 
-	function getModel(String $modelname, String $tablename = null) {
+	function getTableByModel(String $modelname, String $tablename = null) {
 		return (new Table($this->getDb(), "\\Models\\{$modelname}", $tablename));
 	}
 
-	function getSiteModel(String $modelname, String $tablename = null) {
-		return (new Table($this->getSiteDb(), "\\Sites\\{$this->namespace}\\Models\\{$modelname}", $tablename));
+	function getTableBySiteModel(String $modelname, String $tablename = null) {
+		return (new Table($this->getSiteDb(), "\\Sites\\{$this->getNamespace()}\\models\\{$modelname}", $tablename));
 	}
 
 	function callController(String $name, String $action, Array $argv = []) {
-		$controller = "\\Sites\\{$this->_namespace}\\controllers\\{$name}Controller";
+		$controller = "\\Sites\\{$this->getNamespace()}\\controllers\\{$name}Controller";
 		if (!($methods = get_class_methods($controller)))
 			throw new \Exception("Site error: controller '{$controller}' not found !");
 		$action = "{$action}Action";
@@ -140,5 +142,14 @@ class Site {
 
 	function getJsFiles() {
 		return $this->_jsFiles;
+	}
+
+	function addJsURL(String $url) {
+		if (!in_array($url, $this->_jsURLs))
+			$this->_jsURLs[] = $url;
+	}
+
+	function getJsURLs() {
+		return $this->_jsURLs;
 	}
 }

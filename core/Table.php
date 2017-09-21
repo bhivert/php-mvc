@@ -20,7 +20,8 @@ class Table {
 		if (isset($tablename)) {
 			$this->_table_name = strtolower($tablename);
 		} else {
-			$this->_table_name = strtolower(end(explode('\\', $modelname))) . 's';
+			$tmp = explode('\\', $modelname);
+			$this->_table_name = strtolower(end($tmp)) . 's';
 		}
 	}
 
@@ -59,18 +60,15 @@ class Table {
 			));
 	}
 
-	public function create(Array $fields) {
+	public function insert(Array $fields) {
 		$req = '';
-		$vars = [];
 		foreach ($fields as $k => $v) {
-			$req .= (($req === '') ? '' : ' , ') . "{$k}=:{$k}";
-			$vars["{$k}"] = $v;
+			$req .= (($req === '') ? '' : ' , ') . "{$k}='{$v}'";
 		}
 		return (($this->_db->query
 			(
 				"INSERT INTO {$this->_table_name} SET {$req}",
-				$this->_model_name,
-				$vars
+				$this->_model_name
 			) === true) ? $this->_db->lastInsertedId() : false);
 	}
 

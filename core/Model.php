@@ -13,13 +13,8 @@ use Core;
 
 class Model {
 	public function __get($key) {
-		$method = "_{$key}";
+		$method = "get_{$key}";
 		$this->$key = $this->$method();
 		return ($this->$key);
-	}
-
-	public function __isset($key) {
-		$method = "_{$key}";
-		return (isset($this->$method));
 	}
 }
