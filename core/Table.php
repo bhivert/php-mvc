@@ -45,15 +45,15 @@ class Table {
 
 	public function insert(Array $attr) {
 		$req_cells = $req_values = '';
-		foreach ($fields as $k => $v) {
+		foreach ($attr as $k => $v) {
 			$req_cells .= (($req_cells === '') ? "{$k}" : ", {$k}");
 			$req_values .= (($req_values === '') ? ":{$k}" : ", :{$k}");
 		}
 		return (($this->_db->execute
 			(
-				"INSERT INTO {$this->_table_name} ({$reqc}) VALUES ({$reqv})",
+				"INSERT INTO {$this->_table_name} ({$req_cells}) VALUES ({$req_values})",
 				$this->_model_name,
-				$fields
+				$attr
 			) === true) ? $this->_db->lastInsertedId() : false);
 	}
 
@@ -62,7 +62,7 @@ class Table {
 			(
 				"UPDATE {$this->_table_name} SET {$req} WHERE {$where}",
 				$this->_model_name,
-				$fields
+				$attr
 			));
 	}
 
