@@ -25,75 +25,53 @@ class Table {
 		}
 	}
 
-	public function query(String $command, String $condition, $attr = array()) {
-		return ($this->_db->prepared_query
+	public function select(String $fields, String $where, Array $attr = []) {
+		return ($this->_db->fetchAll
 			(
-				"{$command} FROM {$this->_table_name} WHERE {$condition}",
+				"SELECT {$fields} FROM {$this->_table_name} WHERE {$where}",
 				$this->_model_name,
 				$attr
+
 			));
 	}
 
-	public function queryOne(String $command, String $condition, Array $attr = array()) {
-		return ($this->_db->prepared_queryOne
+	public function selectAll(String $fields = '*') {
+		return ($this->_db->fetchAll
 			(
-				"{$command} FROM {$this->_table_name} WHERE {$condition}",
-				$this->_model_name,
-				$attr
-			));
-	}
-
-	public function all() {
-		return ($this->_db->prepared_query
-			(
-				"SELECT * FROM {$this->_table_name}",
+				"SELECT {$fields} FROM {$this->_table_name}",
 				$this->_model_name
 			));
 	}
 
-	public function findId($id) {
-		return ($this->_db->prepared_query
-			(
-				"SELECT * FROM {$this->_table_name} WHERE id = ?",
-				$this->_model_name,
-				[$id]
-			));
-	}
-
-	public function insert(Array $fields) {
-		$req = '';
+	public function insert(Array $attr) {
+		$req_cells = $req_values = '';
 		foreach ($fields as $k => $v) {
-			$req .= (($req === '') ? '' : ' , ') . "{$k}='{$v}'";
+			$req_cells .= (($req_cells === '') ? "{$k}" : ", {$k}");
+			$req_values .= (($req_values === '') ? ":{$k}" : ", :{$k}");
 		}
-		return (($this->_db->query
+		return (($this->_db->execute
 			(
-				"INSERT INTO {$this->_table_name} SET {$req}",
-				$this->_model_name
+				"INSERT INTO {$this->_table_name} ({$reqc}) VALUES ({$reqv})",
+				$this->_model_name,
+				$fields
 			) === true) ? $this->_db->lastInsertedId() : false);
 	}
 
-	public function updateId($id, Array $fields) {
-		$req = '';
-		$vars = [];
-		foreach ($fields as $k => $v) {
-			$req .= (($req === '') ? '' : ' , ') . "{$k}=:{$k}";
-			$vars["{$k}"] = $v;
-		}
-		$vars['id'] = $id;
-		return ($this->_db->query
+	public function update(String $set, String $where, Array $attr = []) {
+		return ($this->_db->execute
 			(
-				"UPDATE {$this->_table_name} SET {$req} WHERE id=:id",
+				"UPDATE {$this->_table_name} SET {$req} WHERE {$where}",
 				$this->_model_name,
-				$vars
+				$fields
 			));
 	}
 
-	public function deleteId($id) {
-		return ($this->_db->query
+	public function delete(String $where, Array $attr = []) {
+		return ($this->_db->execute
 			(
-				"DELETE FROM {$this->_table_name} WHERE id=:id",
+				"DELETE FROM {$this->_table_name} WHERE {$where}",
 				$this->_model_name,
-				['id' => $id]
+				$attr
 			));
 	}
 }

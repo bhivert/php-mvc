@@ -34,17 +34,18 @@ class Database {
 		return ($this->_pdo);
 	}
 
-	public function query(String $statement, String $modelname, Array $attr = array()) {
-		return ($this->getPdo()->query($statement, PDO::FETCH_CLASS, $modelname, $attr));
+	public function execute(String $statement, String $modelname, Array $attr = array()) {
+		$request = $this->getPdo()->prepare($statement);
+		return ($request->execute($attr));
 	}
 
-	public function prepared_query(String $statement, String $modelname, Array $attr = array()) {
+	public function fetchAll(String $statement, String $modelname, Array $attr = array()) {
 		$request = $this->getPdo()->prepare($statement);
 		$request->execute($attr);
 		return ($request->fetchAll(PDO::FETCH_CLASS, $modelname));
 	}
 
-	public function prepared_queryOne(String $statement, String $modelname, Array $attr = array()) {
+	public function fetchOne(String $statement, String $modelname, Array $attr = array()) {
 		$request = $this->getPdo()->prepare($statement);
 		$request->execute($attr);
 		$request->setFetchMode(PDO::FETCH_CLASS, $modelname);
