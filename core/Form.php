@@ -22,10 +22,6 @@ class Form {
 		$this->_valid = [];
 	}
 
-	public	function addItem(Array $id, Array $class) {
-		$this["{$id}"] = $class;
-	}
-
 	public function isPosted() {
 		if (!empty($_POST) && isset($_POST['submit']) && empty(array_diff($_POST, $this->_request)))
 			return true;
@@ -41,8 +37,8 @@ class Form {
 		if (empty($request) || !isset($request['csrf']) || $request['csrf'] !== \Core\Session::getKey('csrf'))
 			$valid = false;
 		foreach(get_class_methods($this->_model) as $method) {
-			if (strncmp($method, 'form_', 5) === 0) {
-				$key = substr($method, 5);
+			if (strncmp($method, 'x_', 2) === 0) {
+				$key = substr($method, 2);
 				if (!isset($this->_request[$key])) {
 					$this->_valid[$key] = 'error'; 
 					$valid = false;
