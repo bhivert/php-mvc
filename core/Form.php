@@ -16,25 +16,18 @@ class Form {
 	private	$_valid;
 
 	public function	__construct(Array $request, \Core\Model $model, Array $items = []) {
-		$this->_request = $request;
+		$this->_request = [];
+		foreach ($request as $key => $value) {
+			$this->_request[preg_replace('/[^a-zA-Z0-9]/', '_', $key)] = $value;
+		}
 		$this->_items = $items;
 		$this->_model = $model;
 		$this->_valid = [];
 	}
 
-	public function isPosted() {
-		if (!empty($_POST) && isset($_POST['submit']) && empty(array_diff($_POST, $this->_request)))
-			return true;
-		return false;
-	}
-
-	public function isValid(Array $request = null) {
+	public function isValid() {
 		$valid = true;
-		if ($request == null)
-			$request = $this->_request;
-		else
-			$this->_request = $request;
-		if (empty($request) || !isset($request['csrf']) || $request['csrf'] !== \Core\Session::getKey('csrf'))
+		if (empty($this->_request) || !isset($this->_request['csrf']) || $this->_request['csrf'] !== \Core\Session::getKey('csrf'))
 			$valid = false;
 		foreach(get_class_methods($this->_model) as $method) {
 			if (strncmp($method, 'x_', 2) === 0) {

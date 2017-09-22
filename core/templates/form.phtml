@@ -41,9 +41,9 @@
 		<div class='row form-group has-feedback <?php if (isset($valid[$id])) echo $bs_errors[$valid[$id]] ?>'>
 			<label for='<?= $id ?>' class='control-label'><?= $param['label'] ?></label>
 			<?php if (in_array($param['type'], $input_types)) : ?>
-				<input id='<?= $id ?>' name='<?= $id ?>' type='<?= $param['type'] ?>' value='<?= (isset($request[$id])) ? $request[$id] : ((isset($param['value'])) ? $param['value'] : '' )?>' placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>' class='form-control <?= $param['class'] ?>' style='<?= $param['style'] ?>'>
+				<input id='<?= $id ?>' name='<?= $id ?>' type='<?= $param['type'] ?>' value='<?= (isset($request[$id])) ? $request[$id] : ((isset($param['value'])) ? $param['value'] : '' ) ?>' placeholder='<?= (isset($param['placeholder'])) ? $param['placeholder'] : '' ?>' class='form-control <?= $param['class'] ?>' style='<?= $param['style'] ?>'>
 			<?php else : ?>
-				<<?= $param['type'] ?> id='<?= $id ?>' name='<?= $id ?>' placeholder='<?php if (isset($param['placeholder'])) echo $param['placeholder'] ?>' class='<?= $param['class'] ?>' style='border-radius:5px;<?= $param['style'] ?>'><?= (isset($request[$id])) ? $request[$id] : '' ?><<?= "/{$param['type']}" ?>>
+				<<?= $param['type'] ?> id='<?= $id ?>' name='<?= $id ?>' placeholder='<?php if (isset($param['placeholder'])) echo $param['placeholder'] ?>' class='<?= $param['class'] ?>' style='border-radius:5px;<?= $param['style'] ?>'><?= (isset($request[$id])) ? $request[$id] : ((isset($param['value'])) ? $param['value'] : '' ) ?><<?= "/{$param['type']}" ?>>
 			<?php endif; ?>
 			<span class='glyphicon form-control-feedback <?php if (isset($valid[$id])) echo $bs_glyph[$valid[$id]] ?>'></span>
 		</div>
