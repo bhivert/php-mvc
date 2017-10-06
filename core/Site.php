@@ -133,7 +133,7 @@ class Site {
 	}
 
 	function addJsFile(String $file) {
-		$file = "public/js/{$file}.js";
+		$file = "/public/js/{$file}.js";
 		if (!file_exists(ROOT.$file))
 			throw new \Exception("Site error: file '{$file}' not found !");
 		if (!in_array($file, $this->_jsFiles))

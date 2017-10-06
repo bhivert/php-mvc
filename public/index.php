@@ -39,9 +39,10 @@ try {
 		if (preg_match('/^.*\.(.*)$/', $_SERVER['REQUEST_URI'], $m) === 0
 			|| !isset($mine_t[$m[1]]))
 			throw new Exception("Index Error: UnAutorized mine type !");
-		header("Content-type: ".$mine_t[$m[1]]);
+		header("Content-type: {$mine_t[$m[1]]}");
 		require ROOT.$_SERVER['REQUEST_URI'];
 	} else {
+		header('Content-type: text/html');
 		(new \Core\Router())->route($_SERVER['REQUEST_URI']);
 	}
 
