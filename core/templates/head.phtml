@@ -1,7 +1,4 @@
 <head>
-	<meta charset='<?= $site->getCharset() ?>' />
-	<title><?= $site->getTitle() ?></title>
-
 	<?php if (($gtm_id = $site->getGtmId()) != '') : ?>
 		<!-- Google Tag Manager -->
 		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -11,6 +8,8 @@
 		})(window,document,'script','dataLayer','<?= $gtm_id ?>');</script>
 		<!-- End Google Tag Manager -->
 	<?php endif;?>
+	<meta charset='<?= $site->getCharset() ?>' />
+	<title><?= $site->getTitle() ?></title>
 
 	<meta name='author' content='<?= $site->getAuthor() ?>'>
 	<meta name='keywords' content='<?= $site->getKeywords() ?>'>
@@ -19,4 +18,11 @@
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
 	<link rel="stylesheet" href='/public/css/default.css'>
+	<link rel="stylesheet" href='/public/css/default.css'>
+	<?php foreach ($site->getCssURLs() as $url) : ?>
+		<link rel='stylesheet' href='<?= $url ?>'>
+	<?php endforeach ;?>
+	<?php foreach ($site->getCssFiles() as $file) : ?>
+		<link rel='stylesheet' href='<?= $file ?>'>
+	<?php endforeach ;?>
 </head>

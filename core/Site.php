@@ -16,6 +16,8 @@ class Site {
 	private $_config;
 	private	$_mainDB;
 	private	$_siteDB;
+	private	$_cssFiles;
+	private	$_cssURLs;
 	private	$_jsFiles;
 	private	$_jsURLs;
 
@@ -38,6 +40,8 @@ class Site {
 			$conf = require ROOT."sites/{$this->_namespace}/database.php";
 			$this->_siteDB = new Database($conf['db_name'], $conf['db_user'], $conf['db_passwd'], $conf['db_host']);
 		}
+		$this->_cssFiles = [];
+		$this->_cssURLs = [];
 		$this->_jsFiles = [];
 		$this->_jsURLs = [];
 		if (!$this->getErrorState()) {
@@ -130,6 +134,27 @@ class Site {
 		if (!in_array($action, $methods))
 			throw new \Exception("Site error: '{$controller}->{$action}' not found !");
 		return (new $controller($this))->$action($argv);
+	}
+
+	function addCssFile(String $file) {
+		$file = "/public/css/{$file}.css";
+		if (!file_exists(ROOT.$file))
+			throw new \Exception("Site error: file '{$file}' not found !");
+		if (!in_array($file, $this->_cssFiles))
+			$this->_cssFiles[] = $file;
+	}
+
+	function getCssFiles() {
+		return $this->_cssFiles;
+	}
+
+	function addCssURL(String $url) {
+		if (!in_array($url, $this->_cssURLs))
+			$this->_cssURLs[] = $url;
+	}
+
+	function getCssURLs() {
+		return $this->_cssURLs;
 	}
 
 	function addJsFile(String $file) {
